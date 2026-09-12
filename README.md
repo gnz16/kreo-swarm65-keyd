@@ -21,6 +21,17 @@
 
 This copies both config files to `/etc/keyd/` and restarts the `keyd` service.
 
+## Wired mode: knob is a separate device
+
+When wired (USB-C), the knob's volume/mute events come from a distinct
+`Kreo Swarm65 Consumer Control` evdev node, not the main Keyboard node used
+for Right Shift. Over Bluetooth, no such separate node exists — the same
+Keyboard node emits everything, so `kreo-swarm65.conf` handles it all in one
+file. Wired therefore needs a third file, `kreo-swarm65-wired-consumer.conf`,
+targeting that Consumer Control node's own id. Find it the same way as any
+other id (see below); it prints as a separate `DEVICE: ignoring ... Consumer
+Control` line in `journalctl -u keyd` until it's added to a config.
+
 ## Your keyboard's IDs will differ
 
 The `[ids]` line in each config (`3151:5004:...` / `3151:5002:...`) includes a device-instance hash that's tied to *this* keyboard's Bluetooth pairing slot and USB enumeration on the machine this was built on. Yours will be different. To find your own:
