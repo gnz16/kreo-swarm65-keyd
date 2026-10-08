@@ -52,6 +52,15 @@ echo 'macos-option-as-alt = true' >> ~/.config/ghostty/config
 
 Approve the Karabiner driver extension (System Settings, Login Items & Extensions, Driver Extensions) and grant Input Monitoring. `herdr-focus` needs Ghostty 1.3 or newer (AppleScript) and Automation permission for the process that calls it.
 
+### Dock icon (Herdr.app)
+
+`/Applications/Herdr.app` is a wrapper whose stock `Contents/MacOS/Herdr` runs `open -a Ghostty --args <launcher>`. `open` drops `--args` when Ghostty is already running, so the Dock icon opened an empty Ghostty. [`config/macos/Herdr.app-wrapper.sh`](config/macos/Herdr.app-wrapper.sh) replaces it with a call to `herdr-focus`, so the Dock icon and the knob press do the same thing. After replacing the script, re-sign the bundle:
+
+```sh
+cp config/macos/Herdr.app-wrapper.sh /Applications/Herdr.app/Contents/MacOS/Herdr
+codesign --force --deep -s - /Applications/Herdr.app
+```
+
 ### Gotchas
 
 - The knob sends Consumer Control usages, so the rules use `consumer_key_code` (`volume_increment`, `volume_decrement`, `mute`), not `key_code`.
