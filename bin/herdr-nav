@@ -1,0 +1,20 @@
+#!/bin/bash
+# Step Herdr's focused workspace forward/back (wraps around) over its socket API.
+# Terminal-independent: no keystrokes, no window focus needed.
+# Usage: herdr-nav next|prev
+set -euo pipefail
+HERDR="${HERDR_BIN:-$HOME/.local/bin/herdr}"
+dir="${1:?usage: herdr-nav next|prev}"
+
+target=$("$HERDR" workspace list | python3 -c '
+import json, sys
+dirn = sys.argv[1]
+ws = sorted(json.load(sys.stdin)["result"]["workspaces"], key=lambda w: w["number"])
+if not ws:
+    sys.exit(1)
+cur = next((i for i, w in enumerate(ws) if w["focused"]), 0)
+step = 1 if dirn == "next" else -1
+print(ws[(cur + step) % len(ws)]["workspace_id"])
+' "$dir")
+
+exec "$HERDR" workspace focus "$target" >/dev/null

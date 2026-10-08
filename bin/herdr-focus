@@ -1,0 +1,38 @@
+#!/bin/bash
+# Bring the Ghostty window running Herdr to the front; create it if missing.
+# Tracks the window by Ghostty's stable window id (Herdr rewrites titles, so
+# titles are not a reliable key). Requires Ghostty >= 1.3 (AppleScript support).
+set -euo pipefail
+HERDR="${HERDR_BIN:-$HOME/.local/bin/herdr}"
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/herdr-nav"
+mkdir -p "$state_dir"
+id_file="$state_dir/window_id"
+wid=$(cat "$id_file" 2>/dev/null || true)
+
+# Ghostty launched from inside a Herdr pane inherits HERDR_* and refuses to
+# start a nested Herdr. Strip them so the new window attaches as a normal client.
+launch="/usr/bin/env -u HERDR_ENV -u HERDR_PANE_ID -u HERDR_TAB_ID -u HERDR_WORKSPACE_ID -u HERDR_SOCKET_PATH -u HERDR_BIN_PATH -u TERM_PROGRAM $HERDR"
+
+osascript - "$wid" "$launch" <<'APPLESCRIPT' > "$id_file.new"
+on run argv
+  set wid to item 1 of argv
+  set launchCmd to item 2 of argv
+  tell application "Ghostty"
+    activate
+    if wid is not "" then
+      repeat with w in windows
+        if (id of w) is wid then
+          activate window w
+          return wid
+        end if
+      end repeat
+    end if
+    set cfg to new surface configuration
+    set command of cfg to launchCmd
+    set w to new window with configuration cfg
+    activate window w
+    return id of w
+  end tell
+end run
+APPLESCRIPT
+mv "$id_file.new" "$id_file"

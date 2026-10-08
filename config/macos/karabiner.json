@@ -1,0 +1,165 @@
+{
+  "profiles": [
+    {
+      "complex_modifications": {
+        "rules": [
+          {
+            "description": "Kreo Swarm65: Right Shift \u2192 fn (Voxtype PTT)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "right_shift",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "fn"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20484
+                      },
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20482
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Kreo Swarm65: Knob CW \u2192 Herdr next workspace",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "consumer_key_code": "volume_increment"
+                },
+                "to": [
+                  {
+                    "shell_command": "/Users/apple/.local/bin/herdr-nav next"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20484
+                      },
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20482
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Kreo Swarm65: Knob CCW \u2192 Herdr previous workspace",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "consumer_key_code": "volume_decrement"
+                },
+                "to": [
+                  {
+                    "shell_command": "/Users/apple/.local/bin/herdr-nav prev"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20484
+                      },
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20482
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Kreo Swarm65: Knob press \u2192 focus Herdr window (Ghostty)",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "consumer_key_code": "mute"
+                },
+                "to": [
+                  {
+                    "shell_command": "/Users/apple/.local/bin/herdr-focus"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "type": "device_if",
+                    "identifiers": [
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20484
+                      },
+                      {
+                        "vendor_id": 12625,
+                        "product_id": 20482
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "name": "Omarchy M1",
+      "selected": true,
+      "virtual_hid_keyboard": {
+        "country_code": 0,
+        "keyboard_type_v2": "ansi"
+      },
+      "devices": [
+        {
+          "identifiers": {
+            "vendor_id": 12625,
+            "product_id": 20484,
+            "is_keyboard": true,
+            "is_pointing_device": true
+          },
+          "ignore": false
+        },
+        {
+          "identifiers": {
+            "vendor_id": 12625,
+            "product_id": 20482,
+            "is_keyboard": true,
+            "is_pointing_device": true
+          },
+          "ignore": false
+        }
+      ]
+    }
+  ]
+}
